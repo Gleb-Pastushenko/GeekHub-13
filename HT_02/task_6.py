@@ -7,8 +7,7 @@ from tasks_data import task_6_list
 
 
 def getValue():
-    print('Enter any value:  ', end='')
-    input_value = input()
+    input_value = input('Enter any value:  ')
     return input_value
 
 
@@ -37,10 +36,9 @@ def getConvertedValue(value):
 
 
 def printIsInList(val, list):
-    print(f'The value is{"" if val in list else " not"} in list')
+    print(f'The value is{" not" if val not in list else ""} in list')
 
     emptyLine()
-
     print(f'The list values are: {list}')
 
 

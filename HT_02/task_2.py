@@ -12,14 +12,12 @@ def createWordsSet(string):
 
 if __name__ == "__main__":
     doubleLine()
-    print('Enter the first colors set separaterd by commas:', end='  ')
-
-    color_list_1 = createWordsSet(input())
+    color_list_1 = createWordsSet(
+        input('Enter the first colors set separaterd by commas:  '))
 
     emptyLine()
-    print('Enter the second colors set separaterd by commas:', end='  ')
-
-    color_list_2 = createWordsSet(input())
+    color_list_2 = createWordsSet(
+        input('Enter the second colors set separaterd by commas:  '))
 
     singleLine()
     uniques_for_list_1 = list(color_list_1.difference(color_list_2))

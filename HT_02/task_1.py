@@ -16,8 +16,7 @@ def toIntsTuple(raw_list):
 
 if __name__ == "__main__":
     doubleLine()
-    print('Enter comma separated integer numbers:', end='  ')
-    user_input_raw = input().split(',')
+    user_input_raw = input('Enter comma separated int values:  ').split(',')
     singleLine()
 
     user_list = toIntsList(user_input_raw)

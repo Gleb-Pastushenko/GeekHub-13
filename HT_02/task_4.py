@@ -7,8 +7,7 @@ from task_3 import getNumber
 
 def promptValue():
     emptyLine()
-    print('Input any string:  ', end='')
-    input_value = input()
+    input_value = input('Input any string:  ')
     return input_value if input_value.isnumeric() else None
 
 

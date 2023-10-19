@@ -5,8 +5,7 @@ from text_decoration import doubleLine, singleLine, emptyLine
 
 
 def getNumber():
-    print('Enter an integer number:  ', end='')
-    input_value = input()
+    input_value = input('Enter an integer number:  ')
     return (int(input_value))
 
 
