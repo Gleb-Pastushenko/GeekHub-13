@@ -1,3 +1,5 @@
+# Write a script to get the maximum and minimum value in a dictionary
+
 from text_decoration import doubleLine, singleLine, emptyLine
 from tasks_data import task_6_data
 
@@ -9,6 +11,9 @@ def isNumberValue(val):
     except:
         pass
 
+
+# TASK DATA
+task_6_data = {1: '23', 'two': [1, 3, 3], 3: 1.5, 'four': '4.4'}
 
 if __name__ == "__main__":
     doubleLine()
