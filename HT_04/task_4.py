@@ -7,7 +7,7 @@
 
 class CustomError(Exception):
     def __init__(self, message="The CustomError", *args):
-       super().__init__(message, *args)
+        super().__init__(message, *args)
 
 
 class SpecificError(Exception):
@@ -18,15 +18,6 @@ class SpecificError(Exception):
 if __name__ == "__main__":
     try:
         print('Raising the SpecificError...')
-        raise SpecificError()
-    except SpecificError as err:
-        try:
-            print('Catching the SpecificError...')
-            print(f'Catched error: {err}')
-            print('Reraising the original error...')
-            raise CustomError("Rerised error!", err)
-        except CustomError as err:
-            print(f'The original error:  {err}')
-            print('This is the custom error Message!')
-    except:
-        print('Unknown error occured!')
+        raise SpecificError('Specific error rised!')
+    except SpecificError as error:
+        raise CustomError('Custom error rised!') from error
