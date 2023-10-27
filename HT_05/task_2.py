@@ -4,7 +4,7 @@
 # Таким чином ми будемо викликати одну (четверту) функцiю, а вона в своєму тiлi - ще 3.
 
 
-def getInteger(prompt='Enter int value', *, min_val=None, max_val=None):
+def get_integer(prompt='Enter int value', *, min_val=None, max_val=None):
     integer = None
     prompt = prompt.strip().strip(' :=')
 
@@ -22,8 +22,8 @@ def getInteger(prompt='Enter int value', *, min_val=None, max_val=None):
     return integer
 
 
-def inputIncomeByMonths(months_number):
-    income_list = [getInteger(f'month {i + 1} income', min_val=0)
+def input_income_by_months(months_number):
+    income_list = [get_integer(f'month {i + 1} income', min_val=0)
                    for i in range(months_number)]
 
     return income_list
@@ -39,15 +39,15 @@ def mean_median(values):
     return mean, median
 
 
-def getIncomeStatistics():
-    months_number = getInteger('Enter the number of income months', min_val=2)
-    income_list = inputIncomeByMonths(months_number)
+def get_incomes_statistics():
+    months_number = get_integer('Enter the number of income months', min_val=2)
+    income_list = input_income_by_months(months_number)
     mean, median = mean_median(income_list)
     return {'mean': mean, 'median': median}
 
 
 if __name__ == "__main__":
-    statistics = getIncomeStatistics()
+    statistics = get_incomes_statistics()
 
     for stat_name, stat_value in statistics.items():
         print(f'{stat_name}: {stat_value}')

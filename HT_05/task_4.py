@@ -7,23 +7,23 @@
 import re
 
 
-def extractAlphaDigits(string):
+def extract_alpha_digits(string):
     alpha_list = re.findall(r'[a-zA-Z]', string)
     digits_list = re.findall(r'\d+', string)
 
     return alpha_list, digits_list
 
 
-def alphaDigitsCounter(string):
-    alpha_list, digits_list = extractAlphaDigits(string)
+def alpha_digits_counter(string):
+    alpha_list, digits_list = extract_alpha_digits(string)
 
     print(f'Total string length:  {len(string)}')
     print(f'Number of alphabetical chars:  {len("".join(alpha_list))}')
     print(f'Number of digit characters:  {len("".join(digits_list))}')
 
 
-def concatAlphaSumNumbers(string):
-    alpha_list, digits_list = extractAlphaDigits(string)
+def concat_alpha_sum_numbers(string):
+    alpha_list, digits_list = extract_alpha_digits(string)
 
     numbers_sum = sum(map(lambda x: int(x), digits_list))
     strings_concat = "".join(alpha_list)
@@ -32,7 +32,7 @@ def concatAlphaSumNumbers(string):
     print(f'Concatenated alphabetical:  {strings_concat}')
 
 
-def sentensesLengths(string):
+def sentense_lengths(string):
     sentenses = list(map(lambda sentense: sentense.strip(), string.split(' ')))
     sentenses_lengths = list(filter(lambda item: bool(
         item), (map(lambda sentense: len(sentense), sentenses))))
@@ -42,13 +42,16 @@ def sentensesLengths(string):
         f'Sentenses lengths:  {sentenses_lengths}')
 
 
-def handleString(string):
+def hangle_string(string):
     str_len = len(string)
 
-    alphaDigitsCounter(string)
-    concatAlphaSumNumbers(string)
-    sentensesLengths(string)
+    if 30 <= str_len <= 50:
+        alpha_digits_counter(string)
+    elif str_len < 30:
+        concat_alpha_sum_numbers(string)
+    else:
+        sentense_lengths(string)
 
 
 if __name__ == "__main__":
-    handleString(input('Enter custom string:  '))
+    hangle_string(input('Enter custom string:  '))

@@ -7,7 +7,7 @@
 #    x == y.      вiдповiдь - "х дорiвнює y"
 
 
-def getFloat(prompt='Enter custom value', *, min_val=None, max_val=None):
+def get_float(prompt='Enter custom value', *, min_val=None, max_val=None):
     float_val = None
     prompt = prompt.strip().strip(' :=')
 
@@ -35,7 +35,7 @@ def compare(x, y):
 
 
 if __name__ == '__main__':
-    x = getFloat('Enter x')
-    y = getFloat('Enter y')
+    x = get_float('Enter x')
+    y = get_float('Enter y')
 
     compare(x, y)

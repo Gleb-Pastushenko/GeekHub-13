@@ -4,7 +4,7 @@
 # Операції що мають бути присутні: +, -, *, /, %, //, **. Не забудьте протестувати з різними значеннями на предмет помилок!
 
 
-def inputAndDetermineType(prompt=''):
+def input_and_determine_type(prompt=''):
     value = None
 
     while value is None:
@@ -26,7 +26,7 @@ def calculate(val_1, val_2, operator):
     var_1_type = val_1['type']
     var_2_type = val_2['type']
 
-    if operator in "%//" and (var_1_type == float or var_2_type == float):
+    if (operator == '%' or operator == '//') and (var_1_type == float or var_2_type == float):
         print('This operator requires both operands to be integer values!!!')
     elif operator == "+":
         print(f'Result:  {var_1 + var_2}')
@@ -37,7 +37,7 @@ def calculate(val_1, val_2, operator):
     elif operator == "**" and var_1 == 0 and var_2 < 0:
         print(f'This will cause the "Zero division" error. Can\'t be done!')
     elif operator == "**":
-        print(f'Result:  {var_1**var_2}')
+        print(f'Result:  {var_1 ** var_2}')
     elif operator == "/" and var_2 == 0:
         print('This will cause "Zero division" error. Can\'t be done')
     elif operator == "/":
@@ -49,8 +49,8 @@ def calculate(val_1, val_2, operator):
 
 
 if __name__ == "__main__":
-    val_1 = inputAndDetermineType('Enter value 1:  ')
-    val_2 = inputAndDetermineType('Enter value 2:  ')
+    val_1 = input_and_determine_type('Enter value 1:  ')
+    val_2 = input_and_determine_type('Enter value 2:  ')
     operator = input('Enter an operator:  ').strip()
 
     calculate(val_1, val_2, operator)
