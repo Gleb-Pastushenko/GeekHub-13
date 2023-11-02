@@ -8,12 +8,15 @@
 from functools import reduce
 
 
-def bank(a, years, percents=10):
-    final_sum = round(reduce(lambda a, _: a + a * percents/100, range(years), a), 2)
-    
-    print(f'The amount on you account will be {final_sum} in {years} years!')
+def bank(a, years, percents=10):    
+    for _ in range(years):
+        a += a * percents / 100
 
-    return final_sum
+    a = round(a, 2)
+
+    print(f'The amount on you account will be {a} in {years} years!')
+
+    return a
 
 
 if __name__ == "__main__":

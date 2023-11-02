@@ -2,24 +2,16 @@
 # вертатиме 3 значення у вигляді кортежа: периметр квадрата, площа квадрата та його діагональ.
 
 
-def square(side_length):
-    try:
-        side_length = float(side_length)
-        if side_length < 0:
-            raise ValueError
-            
-        perimeter = side_length * 4
-        area = side_length ** 2
-        diagonal = (2 * side_length**2)**0.5
+def square(side_length):   
+    side_length = float(side_length)
 
-        return perimeter, area, diagonal
-    
-    except (ValueError, TypeError):
-        print('The square side length shoul be positive int or float!')
+    perimeter = side_length * 4
+    area = side_length ** 2
+    diagonal = (2 * side_length**2)**0.5
 
-    except Exception as error:
-        print(type(error))
-    
+    return perimeter, area, diagonal
+
 
 if __name__ == "__main__":
-    square(input('Enter a square side lenght: '))
+    square_params = square(input('Enter a square side lenght: '))
+    print(square_params)
