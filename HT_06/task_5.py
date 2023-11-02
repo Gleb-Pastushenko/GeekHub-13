@@ -12,3 +12,9 @@ def fibonacci(number):
     else:
         print('Entered number should be positive!')
         return
+    
+
+if __name__ == "__main__":
+    fibonacci_numbers = fibonacci(int(input("Enter a positive integer number:  ")))
+
+    print(fibonacci_numbers)

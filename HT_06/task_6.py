@@ -7,7 +7,18 @@
 
 
 def shift(lst, shift):
-    sign = int(abs(shift)/shift)
-    shift_value = abs(shift) % len(lst) * sign
+    if shift != 0:
+        sign = int(abs(shift)/shift)
+        shift_value = abs(shift) % len(lst) * sign
 
-    return [*lst[-shift_value:], *lst[:-shift_value]]
+        return [*lst[-shift_value:], *lst[:-shift_value]]
+
+    else:
+        return lst
+
+if __name__ == "__main__":    
+    input_list = input('Enter a custom list (comma separated values):  ').strip(' []{}()').split(',')
+    input_list = input_list or []    
+    input_shift = int(input('Enter a shift value:  '))
+
+    print(shift(input_list, input_shift))

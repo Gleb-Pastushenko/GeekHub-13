@@ -4,6 +4,8 @@
 # Наприклад:
 # 1, 1, 'foo', [1, 2], True, 'foo', 1, [1, 2] ----> "1 -> 3, foo -> 2, [1, 2] -> 2, True -> 1"
 
+DUMMY_LIST = [1, 1, 'foo', [1, 2], True, 'foo', 1, [1, 2]]
+
 
 def repetitions(lst):
     rep_list = []
@@ -13,10 +15,14 @@ def repetitions(lst):
         count = 1
         
         for i in range(len(lst)-1, -1, -1):
-            if lst[i] == cur_item and type(lst[i]) == type(cur_item):
+            if lst[i] == cur_item and type(lst[i]) is type(cur_item):
                 lst.pop(i)
                 count += 1
         
         rep_list.append([cur_item, count])
     
     print(', '.join([f'{item} -> {count}' for item, count in rep_list]))
+
+
+if __name__ == "__main__":
+    repetitions(DUMMY_LIST)

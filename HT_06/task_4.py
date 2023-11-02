@@ -16,3 +16,10 @@ def prime_list(lower_limit, upper_limit):
         return
     
     return primes if primes else "There are no any primes in the given range!"
+
+
+if __name__ == "__main__":
+    lower_lim = int(input('Enter lower limit:  '))
+    upper_lim = int(input('Enter upper limit:  '))
+
+    print(prime_list(lower_lim, upper_lim))
