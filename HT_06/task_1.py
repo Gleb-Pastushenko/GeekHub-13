@@ -15,3 +15,5 @@ def square(side_length):
 if __name__ == "__main__":
     square_params = square(input('Enter a square side lenght: '))
     print(square_params)
+
+    
