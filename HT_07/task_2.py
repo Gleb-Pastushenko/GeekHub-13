@@ -19,17 +19,13 @@ def has_digit(string):
 
 
 def validation(username, password):
-    valid_name = 3 <= len(username) < 50
-    valid_password = 8 <= len(password) and has_digit(password)
-    pwd_includes_name = username.lower() in password.lower()
-
-    if not valid_name:
+    if not (3 <= len(username) < 50):
         raise ValidationException(
             "User name can't be shorter than 3 or longer than 50 letter!")
-    if not valid_password:
+    if not (8 <= len(password) and has_digit(password)):
         raise ValidationException(
             "Password can't be shorter than 8 letters and should contain at least one digit!")
-    if pwd_includes_name:
+    if username.lower() in password.lower():
         raise ValidationException(
             "For security purposes the password shouldn't contain the user name!")
 

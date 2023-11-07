@@ -25,41 +25,37 @@ def has_digit(string):
     return False
 
 
-def validation(username, password):
-    valid_name = 3 <= len(username) < 50
-    valid_password = 8 <= len(password) and has_digit(password)
-    pwd_includes_name = username.lower() in password.lower()
-
-    if not valid_name:
+def validation(login, password):
+    if not (3 <= len(login) < 50):
         raise ValidationException(
             "User name can't be shorter than 3 or longer than 50 letter!")
-    if not valid_password:
+    if not (8 <= len(password) and has_digit(password)):
         raise ValidationException(
             "Password can't be shorter than 8 letters and should contain at least one digit!")
-    if pwd_includes_name:
+    if login.lower() in password.lower():
         raise ValidationException(
             "For security purposes the password shouldn't contain the user name!")
 
 
 def validation_tester(validation_func, test_list):
     for item in test_list:
-        print(f'Name:  {item[0]}')
-        print(f'Password:  {item[1]}')
+        print(f'Name:  {item["login"]}')
+        print(f'Password:  {item["password"]}')
 
         try:
-            validation_func(*item)
+            validation_func(**item)
             print('Status:  OK')
         except Exception as error:
             print(f'Status:  {error}')
 
 
 TEST_LIST = [
-    ['user', 'password8'],
-    ['Vu', 'Chang_pass1'],
-    ['John', 'pass'],
-    ['John', 'password'],
-    ['David', 'pass15'],
-    ['Tina', 'tina_password15']
+    {'login': 'user', 'password': 'password8'},
+    {'login': 'Vu', 'password': 'Chang_pass1'},
+    {'login': 'John', 'password': 'pass'},
+    {'login': 'John', 'password': 'password'},
+    {'login': 'David', 'password': 'pass15'},
+    {'login': 'Tina', 'password': 'tina_password15'}
 ]
 
 

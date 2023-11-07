@@ -13,15 +13,18 @@ class LoginException(Exception):
 
 
 def login(username, password, silent=False):
-    users_list = {
-        'Vasya': 'vasya_pass',
-        'Petya': 'petya_pass',
-        'Kolya': 'kolya_pass',
-        'Ivan': 'ivan_pass',
-        'Sasha': 'sasha_pass',
-    }
+    users_list = [
+        {'login': 'Vasya', 'password': 'Vasya'},
+        {'login': 'Petya', 'password': 'petya_pass'},
+        {'login': 'Kolya', 'password': 'kolya_pass'},
+        {'login': 'Ivan', 'password': 'ivan_pass'},
+        {'login': 'Sasha', 'password': 'sasha_pass'}
+    ]
 
-    if username in users_list and password == users_list[username]:
+    match_list = list(filter(
+        lambda user: user['login'] == username and user['password'] == password, users_list))
+
+    if match_list:
         return True
     else:
         if silent:
@@ -31,8 +34,8 @@ def login(username, password, silent=False):
 
 
 if __name__ == "__main__":
-    print(login('Vasya', 'vasya_pass'))
+    # print(login('Vasya', 'vasya_pass'))
 
     print(login('Yura', 'youra_pass', silent=True))
 
-    print(login('Petya', 'petya pass'))
+    print(login('Petya', 'petya_pass'))
