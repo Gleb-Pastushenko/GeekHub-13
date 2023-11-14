@@ -14,7 +14,11 @@
 #        Подивіться як веде себе стандартний range в таких випадках.
 
 
-def my_range(start, stop, step=1):
+def my_range(start, stop=None, step=1):
+
+    if stop is None:
+        stop = start
+        start = 0
 
     if (type(start), type(stop), type(step)) != (int, int, int):
         raise TypeError('my_range accepts only integer values')
@@ -27,3 +31,5 @@ def my_range(start, stop, step=1):
 if __name__ == "__main__":
     print(list(my_range(1, 10, 2)))
     print(list(my_range(1, -10, 2)))
+    print(list(my_range(10)))
+    print(list(my_range(1, 10)))
