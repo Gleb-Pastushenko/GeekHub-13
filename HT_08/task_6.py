@@ -6,22 +6,10 @@ import re
 
 def shortest_length(string):
 
-    def getWord(string):
-        words = string.replace(',', ' ')
-        words = re.split(r'\s+', words)
+    words = string.replace(',', ' ')
+    words = re.split(r'\s+', words)
 
-        for word in words:
-            yield word
-
-    words = getWord(string)
-
-    shortest = len(next(words))
-
-    while True:
-        try:
-            shortest = min(len(next(words)), shortest)
-        except:
-            return shortest
+    return min((word for word in words), key=len)
 
 
 if __name__ == "__main__":

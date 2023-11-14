@@ -14,24 +14,7 @@
 #        Подивіться як веде себе стандартний range в таких випадках.
 
 
-def my_range(*args):
-    if len(args) == 1:
-        start = 0
-        stop = args[0]
-        step = 1
-    elif len(args) == 2:
-        start = args[0]
-        stop = args[1]
-        step = 1
-    elif len(args) == 3:
-        start = args[0]
-        stop = args[1]
-        step = args[2]
-    elif len(args) > 3:
-        raise TypeError(
-            f'my_range expected at most 3 arguments, got {len(args)}')
-    else:
-        raise TypeError('my_range expected at least 1 argument, got 0')
+def my_range(start, stop, step=1):
 
     if (type(start), type(stop), type(step)) != (int, int, int):
         raise TypeError('my_range accepts only integer values')
@@ -42,5 +25,5 @@ def my_range(*args):
 
 
 if __name__ == "__main__":
-    for i in my_range(1, 10, 2):
-        print(i)
+    print(list(my_range(1, 10, 2)))
+    print(list(my_range(1, -10, 2)))

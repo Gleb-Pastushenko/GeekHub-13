@@ -8,19 +8,7 @@
 
 
 def array_diff(list1, list2):
-    def get_element(list1, list2):
-        for item in list1:
-            if item not in list2:
-                yield item
-
-    result_list = []
-    elements = get_element(list1, list2)
-
-    while True:
-        try:
-            result_list.append(next(elements))
-        except:
-            return result_list
+    return list(item for item in list1 if item not in list2)
 
 
 if __name__ == "__main__":

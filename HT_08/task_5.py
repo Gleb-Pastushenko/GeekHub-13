@@ -12,23 +12,8 @@
 
 
 def repetitions(string):
-    def get_letter(string):
-        for letter in string:
-            yield letter.lower()
-
-    letters = get_letter(string)
-    repetition_counter = 0
-    repetition_dict = {}
-
-    while True:
-        try:
-            current_letter = next(letters)
-            if current_letter in repetition_dict:
-                repetition_dict[current_letter] += 1
-            else:
-                repetition_dict.update({current_letter: 1})
-        except:
-            return len(list(filter(lambda item: repetition_dict[item] > 1, repetition_dict)))
+    string = string.lower()
+    return len(list((letter for letter in set(string) if string.count(letter) > 1)))
 
 
 if __name__ == "__main__":
