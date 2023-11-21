@@ -3,7 +3,7 @@
 #       Якщо в попередньому завданні ви добре продумали структуру програми
 #       то у вас не виникне проблем швидко адаптувати її до нових вимог.
 #     - на старті додати можливість залогінитися або створити нового користувача
-#       (при створенні новго користувача, перевіряється відповідність логіну і паролю мінімальним вимогам.
+#       (при створенні нового користувача, перевіряється відповідність логіну і паролю мінімальним вимогам.
 #       Для перевірки створіть окремі функції)
 #     - в таблиці (базі) з користувачами має бути створений унікальний користувач-інкасатор,
 #       який матиме розширені можливості (домовимось, що логін/пароль будуть admin/admin щоб нам було простіше перевіряти)
@@ -23,6 +23,7 @@ import sqlite3
 
 con = sqlite3.connect("atm.db")
 cursor = con.cursor()
+ATM_DENOM = (10, 20, 50, 100, 200, 500, 1000)
 
 
 def check_login(login):
@@ -76,6 +77,16 @@ def signin():
         valid_password = check_password(password)
 
     cursor.execute("""
+        SELECT login
+        FROM users
+        WHERE login = ?
+    """, (login,))
+
+    if cursor.fetchall():
+        print("User with such login elready exists!")
+        return (False, None)
+
+    cursor.execute("""
         INSERT INTO users
         VALUES (?, ?, 'user')
     """, (login, password))
@@ -106,9 +117,11 @@ def quit():
 def authorize():
     print("1. Log In")
     print("2. Sign In")
-    print("3. Exit")
+    print("3. Quit")
+    print("")
 
     choice = input("Make choice: ")
+    print("")
 
     if choice == "1":
         return login()
@@ -127,6 +140,8 @@ def check_balance(user):
     balance_list = cursor.fetchall()
 
     print(f"Current balance: {balance_list[-1][0]}")
+    print("")
+
     return (True, user)
 
 
@@ -139,7 +154,13 @@ def top_up_balance(user):
     current_balance = cursor.fetchall()[-1][0]
 
     amount = float(
-        input("Enter the amount you want to top up your account with: "))
+        input("Top up amount: "))
+    print("")
+
+    if amount < 0:
+        print("Amount can't be negative!")
+        print("")
+        return (True, user)
 
     cursor.execute(f"""
         INSERT INTO {user}_account
@@ -153,6 +174,42 @@ def top_up_balance(user):
     return (True, user)
 
 
+def atm_withdrawal(amount):
+
+    cursor.execute("""
+        SELECT *
+        FROM atm_balance
+    """)
+
+    atm_banknotes = list(cursor.fetchone()[:-1])
+
+    for i in range(6, -1, -1):
+        cur_denom_banknote_number = amount // ATM_DENOM[i]
+
+        if cur_denom_banknote_number <= atm_banknotes[i]:
+            atm_banknotes[i] -= cur_denom_banknote_number
+            amount -= cur_denom_banknote_number * ATM_DENOM[i]
+        else:
+            amount -= atm_banknotes[i] * ATM_DENOM[i]
+            atm_banknotes[i] = 0
+
+    if amount > 0:
+        print("The ATM does not have the banknotes needed to dispense cash!")
+        return False
+
+    sql_banknotes = ' ,'.join(
+        [f"'{ATM_DENOM[i]}' = {atm_banknotes[i]}" for i in range(7)])
+
+    cursor.execute(f"""
+        UPDATE atm_balance
+        SET {sql_banknotes}
+    """)
+
+    con.commit()
+
+    return True
+
+
 def withdraw(user):
     cursor.execute(f"""
         SELECT balance
@@ -162,22 +219,35 @@ def withdraw(user):
     current_balance = cursor.fetchall()[-1][0]
 
     cursor.execute(f"""
-        SELECT balance
+        SELECT *
         FROM atm_balance
     """)
 
-    current_atm_balance = cursor.fetchall()[-1][0]
+    atm_balance = cursor.fetchone()
+    current_atm_balance = sum(
+        [ATM_DENOM[i] * atm_balance[i] for i in range(7)])
 
     amount = float(
-        input("Enter the amount you want to withdraw: "))
+        input("Withdraw amount: "))
+    print("")
+
+    if amount < 0:
+        print("Amount can't be negative!")
+        print("")
+        return (True, user)
 
     if amount > current_balance:
         print("Withdraw amount exceeds your balance!")
-        return True, user
+        print("")
+        return (True, user)
 
     if amount > current_atm_balance:
         print("Not enouth money in the ATM!")
-        return True, user
+        print("")
+        return (True, user)
+
+    if not atm_withdrawal(amount):
+        return (True, user)
 
     cursor.execute(f"""
         INSERT INTO {user}_account
@@ -193,53 +263,96 @@ def withdraw(user):
 
 def check_atm_balance():
     cursor.execute(f"""
-    SELECT balance
+    SELECT *
     FROM atm_balance
     """)
 
-    atm_balance = cursor.fetchall()[-1][0]
+    atm_balance = cursor.fetchone()
 
-    print(f"Current balance: {atm_balance}")
+    print(f"Top up balance: {atm_balance[-1]}")
+    print("")
+
+    print("Withdraw balance:\n")
+    print("-" * 25)
+    print("|" + " Denomination " + "|" + " Number " + "|")
+    print("-" * 25)
+    for idx, denom in enumerate(ATM_DENOM):
+        print("|" + f"{denom}".center(14) + "|" +
+              f"{atm_balance[idx]}".center(8) + "|")
+    print("-" * 25)
+    print("")
 
     return (True, 'admin')
 
 
-def top_up_atm_balance():
+def refill_atm():
+    banknote_denomination = None
+    banknotes_number = None
+
     cursor.execute(f"""
-        SELECT balance
+        SELECT *
         FROM atm_balance
     """)
 
-    current_atm_balance = cursor.fetchall()[-1][0]
+    atm_balance = list(cursor.fetchone())
 
-    amount = float(
-        input("Enter the amount you want to top up ATM: "))
+    while True:
+        banknote_denomination = int(input('Denomination: '))
+        if banknote_denomination not in ATM_DENOM:
+            print(
+                f"Only the following denominations are available: {ATM_DENOM}")
+            continue
+
+        banknotes_number = int(input('Banknotes number: '))
+        if banknotes_number < 0:
+            print("The value must be positive!")
+            continue
+
+        break
+
+    atm_balance[ATM_DENOM.index(banknote_denomination)] += banknotes_number
 
     cursor.execute(f"""
-        INSERT INTO atm_balance (balance)
-        VALUES ({current_atm_balance + amount})
-    """)
+        UPDATE atm_balance
+        SET '{str(banknote_denomination)}' = {atm_balance[ATM_DENOM.index(banknote_denomination)]}
+    """, ())
 
     con.commit()
 
-    print(f"Current ATM balance is: {current_atm_balance + amount}")
+    check_atm_balance()
+
+    return (True, 'admin')
+
+
+def atm_collection():
+    cursor.execute(f"""
+        UPDATE atm_balance
+        SET balance = 0
+    """)
+    con.commit()
+
+    print("ATM collected!\n")
+    check_atm_balance()
 
     return (True, 'admin')
 
 
 def admin_menu():
     print("1. Check ATM balance")
-    print("2. Top up ATM balance")
+    print("2. Refill ATM")
+    print("3. ATM Collection")
     print("4. Quit")
+    print("")
 
     choice = input("Enter choice: ")
+    print("")
 
     if choice == '1':
         return check_atm_balance()
     elif choice == '2':
-        return top_up_atm_balance()
+        return refill_atm()
     elif choice == '3':
-        return withdraw_atm()
+        return atm_collection()
     elif choice == '4':
         return (False, None)
     else:
@@ -252,8 +365,10 @@ def user_menu(user):
     print("2. Top up balance")
     print("3. Withdraw")
     print("4. Quit")
+    print("")
 
     choice = input("Enter choice: ")
+    print("")
 
     if choice == '1':
         return check_balance(user)
