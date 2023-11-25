@@ -45,7 +45,16 @@ class Calc:
         """
         Creates a last_result attribute and initialize is with None value
         """
-        self.last_result = None
+        self._last_results = [None, None]
+
+    @property
+    def last_result(self):
+        return self._last_results[-1]
+
+    @last_result.setter
+    def last_result(self, value):
+        self._last_results.insert(0, value)
+        self._last_results.pop()
 
     def get_sum(self, a, b):
         """
@@ -59,7 +68,10 @@ class Calc:
         b: int, float
             second term
         """
-        self.last_result = a + b
+        result = a + b
+        self.last_result = result
+
+        return result
 
     def get_difference(self, a, b):
         """
@@ -73,7 +85,10 @@ class Calc:
         b: int, float
             subtrahend
         """
-        self.last_result = a - b
+        result = a - b
+        self.last_result = result
+
+        return result
 
     def get_product(self, a, b):
         """
@@ -87,7 +102,10 @@ class Calc:
         b: int, float
             multiplier
         """
-        self.last_result = a * b
+        result = a * b
+        self.last_result = result
+
+        return result
 
     def get_quotient(self, a, b):
         """
@@ -101,7 +119,10 @@ class Calc:
         b: int, float
             divisor
         """
-        self.last_result = a / b
+        result = a / b
+        self.last_result = result
+
+        return result
 
 
 if __name__ == "__main__":
@@ -112,4 +133,7 @@ if __name__ == "__main__":
     print(calc.last_result)
 
     calc.get_product(15, 4)
+    print(calc.last_result)
+
+    calc.get_difference(18, 7)
     print(calc.last_result)
