@@ -9,21 +9,17 @@ class MyList(list):
         if index == 0:
             raise IndexError()
         elif index > 0:
-            return self.copy()[index - 1]
+            return super().__getitem__(index - 1)
         else:
-            return self.copy()[index]
+            return super().__getitem__(index)
 
     def __setitem__(self, index, value):
         if index == 0:
             raise IndexError()
         elif index > 0:
-            copy = self.copy()
-            copy[index - 1] = value
-            self = copy
+            super().__setitem__(index - 1, value)
         else:
-            copy = self.copy()
-            copy[index] = value
-            self = copy
+            super().__setitem__(index, value)
 
 
 if __name__ == "__main__":
@@ -33,4 +29,9 @@ if __name__ == "__main__":
     print(f'{lst[3]=}')
     print(f'{lst[-1]=}')
     print(f'{lst[-3]=}')
+    lst[1] = -1
+    lst[-1] = -3
+    print(f'{lst[1]=}')
+    print(f'{lst[-1]=}')
+    print(lst)
     print(f'{lst[0]=}')
