@@ -6,17 +6,23 @@ class MyList(list):
         super().__init__(*args, **kwargs)
 
     def __getitem__(self, index):
-        if index < 1:
+        if index == 0:
             raise IndexError()
-        else:
+        elif index > 0:
             return self.copy()[index - 1]
+        else:
+            return self.copy()[index]
 
     def __setitem__(self, index, value):
-        if index < 1:
+        if index == 0:
             raise IndexError()
-        else:
+        elif index > 0:
             copy = self.copy()
             copy[index - 1] = value
+            self = copy
+        else:
+            copy = self.copy()
+            copy[index] = value
             self = copy
 
 
@@ -25,4 +31,6 @@ if __name__ == "__main__":
 
     print(f'{lst[1]=}')
     print(f'{lst[3]=}')
+    print(f'{lst[-1]=}')
+    print(f'{lst[-3]=}')
     print(f'{lst[0]=}')
