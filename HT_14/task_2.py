@@ -17,7 +17,15 @@ def show_day_rate(date, date_str):
     if not check_range(date):
         return
 
-    response = requests.get(REQUEST_URL + date_str)
+    try:
+        response = requests.get(REQUEST_URL + date_str)
+    except Exception:
+        print("Connection failed!")
+
+    if response.status_code // 100 != 2:
+        print("Can't get data from server! Try again later")
+        return
+
     rates = filter(
         lambda rate: rate["currency"] in ("USD", "EUR", "PLN"),
         response.json()["exchangeRate"]
@@ -61,6 +69,11 @@ def rates_for_period():
 
             if not check_range(end_date[0]):
                 end_date = None
+
+        if start_date[0] > end_date[0]:
+            print("The start date is greater then the end date!")
+            start_date = None
+            end_date = None
 
     show_period_rates(start_date, end_date)
     return True

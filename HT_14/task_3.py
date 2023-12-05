@@ -41,7 +41,15 @@ if __name__ == "__main__":
 
     while not last:
         page += 1
-        response = requests.get(f"http://quotes.toscrape.com/page/{page}")
+
+        try:
+            response = requests.get(f"http://quotes.toscrape.com/page/{page}")
+        except Exception:
+            print("Connection failed!")
+
+        if response.status_code // 100 != 2:
+            page -= 1
+
         last = parse_page(response, quotes_list)
 
     print(f"{page} pages have been parsed")

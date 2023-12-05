@@ -6,7 +6,7 @@ from itertools import product
 import requests
 
 
-class ATM():
+class ATM:
     ATM_DENOM = (10, 20, 50, 100, 200, 500, 1000)
 
     def __init__(self):
@@ -413,8 +413,16 @@ class ATM():
 
     @staticmethod
     def show_rates():
-        response = requests.get(
-            "https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=5")
+        try:
+            response = requests.get(
+                "https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=5")
+        except Exception:
+            print("Connection failed!")
+
+        if response.status_code // 100 != 2:
+            print("Can't get data from server! Try again later")
+            return
+
         rates_list = response.json()
 
         for rate in rates_list:
