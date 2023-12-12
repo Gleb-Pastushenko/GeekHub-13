@@ -2,6 +2,7 @@ from typing import Any, Iterable
 import scrapy
 from bs4 import BeautifulSoup
 import csv
+import os
 
 class ExtentionsSpider(scrapy.Spider):
     name = "extentions"
@@ -40,13 +41,7 @@ class ExtentionsSpider(scrapy.Spider):
         return urls
     
     def write_to_csv(self, ext_info):
-        try:
-            with open('extensions.csv', 'a', newline='', encoding='utf-8') as file:
-                fieldnames = ('id', 'name', 'description')
-                writer = csv.DictWriter(file, fieldnames=fieldnames)
-                writer.writerow(ext_info)
-        except:
-            with open('extensions.csv', 'w', newline='', encoding='utf-8') as file:
-                fieldnames = ('id', 'name', 'description')
-                writer = csv.DictWriter(file, fieldnames=fieldnames)
-                writer.writerow(ext_info)
+        with open('extensions.csv', 'a', newline='', encoding='utf-8') as file:
+            fieldnames = ('id', 'name', 'description')
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writerow(ext_info)

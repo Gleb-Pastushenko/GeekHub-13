@@ -69,15 +69,10 @@ def get_response(start_index, end_index, cat_group_id):
 def write_to_csv(cat_group_id, items):
     file_name = f"{cat_group_id}_products.csv"
     
-    try:
-        with open(file_name, 'a') as file:
-            writer = csv.DictWriter(file, fieldnames=FIELD_NAMES)
-            writer.writerows(items)
-    except IOError:
-        with open(file_name, 'w') as file:
-            writer = csv.DictWriter(file, fieldnames=FIELD_NAMES)
-            writer.writerows(items)
-    
+    with open(file_name, 'a') as file:
+        writer = csv.DictWriter(file, fieldnames=FIELD_NAMES)
+        writer.writerows(items)
+
 
 def parse_items(cat_group_id):
     start_index = 1
