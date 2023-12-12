@@ -2,12 +2,14 @@
 # вибираєте будь-яку на ваш вибір доменну зону і парсите список  доменів - їх там буде десятки тисяч (звичайно ураховуючи пагінацію).
 # Всі отримані значення зберігти в CSV файл.
 
-import requests
-from urllib.parse import urljoin
-from bs4 import BeautifulSoup
+import csv
 import random
 from time import sleep
-import csv
+
+from bs4 import BeautifulSoup
+import requests
+from urllib.parse import urljoin
+
 
 BASE_URL = "https://www.expireddomains.net/deleted-domains/"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -45,7 +47,7 @@ def parse_domains():
     while url:
         sleep(random.randint(5, 10))
         response = get_response(url)
-        domains += get_domains(response)
+        save_to_csv(get_domains(response))
         print(f"Domains parsed from: {url}")
         url = next_page_url(response)
         print(f"Next url: {url}")
@@ -54,10 +56,10 @@ def parse_domains():
 
 
 def save_to_csv(domains):
-    with open("domains.csv", "w") as file:
+    with open("domains.csv", "a") as file:
         writer = csv.writer(file)
         writer.writerows(domains)
 
 
 if __name__ == "__main__":
-    save_to_csv(parse_domains())
+    parse_domains()

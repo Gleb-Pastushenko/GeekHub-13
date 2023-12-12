@@ -1,8 +1,7 @@
-from typing import Any, Iterable
-import scrapy
-from bs4 import BeautifulSoup
 import csv
-import os
+
+from bs4 import BeautifulSoup
+import scrapy
 
 class ExtentionsSpider(scrapy.Spider):
     name = "extentions"

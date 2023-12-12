@@ -3,10 +3,12 @@
 # і зберігати їх у CSV файл (наприклад, якщо категорія має ID 12345, то файл буде називатись 12345_products.csv)
 # Наприклад, категорія https://www.sears.com/tools-tool-storage/b-1025184 має ІД 1025184
 
-import requests
 import csv
-from time import sleep
 import random
+from time import sleep
+
+import requests
+
 
 HEADERS = {
     'authority': 'www.sears.com',
