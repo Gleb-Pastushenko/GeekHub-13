@@ -3,6 +3,9 @@ import csv
 from bs4 import BeautifulSoup
 import scrapy
 
+from chrome_exts_parser.items import ChromeExtsParserItem
+
+
 class ExtentionsSpider(scrapy.Spider):
     name = "extentions"
 
@@ -22,12 +25,13 @@ class ExtentionsSpider(scrapy.Spider):
 
     def parse_ext_page(self, response):
         soup = BeautifulSoup(response.text, 'lxml')
+        item = ChromeExtsParserItem()
 
-        id = response.url.split('/')[-1]
-        name = response.css("meta[property=\"og:title\"]::attr(content)").get()
-        description = response.css("meta[property=\"og:description\"]::attr(content)").get()
+        item['id'] = response.url.split('/')[-1]
+        item['name'] = response.css("meta[property=\"og:title\"]::attr(content)").get()
+        item['description'] = response.css("meta[property=\"og:description\"]::attr(content)").get()
 
-        self.write_to_csv({"id": id, "name": name, "description": description})
+        yield item        
 
     def get_loc_urls(self, response):
         soup = BeautifulSoup(response.text, 'lxml')
@@ -39,8 +43,3 @@ class ExtentionsSpider(scrapy.Spider):
         urls = [item.get_text() for item in soup.select('loc')]
         return urls
     
-    def write_to_csv(self, ext_info):
-        with open('extensions.csv', 'a', newline='', encoding='utf-8') as file:
-            fieldnames = ('id', 'name', 'description')
-            writer = csv.DictWriter(file, fieldnames=fieldnames)
-            writer.writerow(ext_info)
