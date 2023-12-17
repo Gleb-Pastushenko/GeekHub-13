@@ -39,7 +39,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from PIL import Image
 
 
-
 class OrderRobot:
     OUTPUT_PATH = Path('output')
 
@@ -89,7 +88,6 @@ class OrderRobot:
     def _open_order_page(self):
         self._driver.get(self.ORDER_SITE_URL)
         self._wait_element((By.LINK_TEXT, "Order your robot!")).click()
-
 
     def _get_orders_list(self):    
         try:
