@@ -12,19 +12,12 @@ class ExtentionsSpider(scrapy.Spider):
     start_urls = ["https://chrome.google.com/webstore/sitemap"]
     
     def parse(self, response):            
-        urls = self.get_loc_urls(response)
-        
-        for url in urls:
-            yield scrapy.Request(url, self.parse_exts_urls)
+        yield from response.follow_all(xpath="//*[local-name() = 'loc']/text()", callback=self.parse_exts_urls)
 
     def parse_exts_urls(self, response):
-        urls = self.get_exts_urls(response)
-
-        for url in urls:
-            yield scrapy.Request(url, self.parse_ext_page)
+        yield from response.follow_all(xpath="//*[local-name() = 'loc']/text()", callback=self.parse_ext_page)
 
     def parse_ext_page(self, response):
-        soup = BeautifulSoup(response.text, 'lxml')
         item = ChromeExtsParserItem()
 
         item['id'] = response.url.split('/')[-1]
@@ -32,14 +25,4 @@ class ExtentionsSpider(scrapy.Spider):
         item['description'] = response.css("meta[property=\"og:description\"]::attr(content)").get()
 
         yield item        
-
-    def get_loc_urls(self, response):
-        soup = BeautifulSoup(response.text, 'lxml')
-        urls = [item.get_text() for item in soup.select('loc')]
-        return urls
-    
-    def get_exts_urls(self, response):
-        soup = BeautifulSoup(response.text, 'lxml')
-        urls = [item.get_text() for item in soup.select('loc')]
-        return urls
     
