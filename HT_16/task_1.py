@@ -22,9 +22,12 @@
 #       Окремо зображення робота зберігати не потрібно. Тобто замість зображень у вас будуть pdf файли які містять зображення з чеком.
 
 import csv
-from time import sleep
+from pathlib import Path
+from shutil import rmtree
+from io import BytesIO
 
 import requests
+import selenium
 from selenium import webdriver
 from selenium.webdriver import ChromeOptions
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -33,9 +36,13 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from PIL import Image
+
 
 
 class OrderRobot:
+    OUTPUT_PATH = Path('output')
+
     ORDERS_LIST_URL = "https://robotsparebinindustries.com/orders.csv"
     ORDER_SITE_URL = "https://robotsparebinindustries.com/"
 
@@ -71,11 +78,18 @@ class OrderRobot:
         )
 
         self._driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+        self._driver.maximize_window()
+
+    def _create_output_dir(self):
+        if self.OUTPUT_PATH.exists():
+            rmtree(self.OUTPUT_PATH)
+
+        self.OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
 
     def _open_order_page(self):
         self._driver.get(self.ORDER_SITE_URL)
         self._wait_element((By.LINK_TEXT, "Order your robot!")).click()
-        self._wait_element((By.CLASS_NAME, "btn-dark")).click()
+
 
     def _get_orders_list(self):    
         try:
@@ -106,36 +120,90 @@ class OrderRobot:
         body__radio_btn.click()
         legs__num_input.send_keys(order['Legs'])
         address__txt_input.send_keys(order['Address'])
-        sleep(10)
 
+    def _get_preview_images_urls(self):
+        # Click preview button    
+        self._wait_element((By.ID, "preview"))   
+        self._driver.execute_script("preview.click()") 
+
+        # Get images urls
+        preview_images = self._wait_element((By.ID, "robot-preview-image"))
+        self._driver.execute_script("window['robot-preview-image'].scrollIntoView()")
+
+        return [img.get_attribute("src") for img in preview_images.find_elements(By.TAG_NAME, 'img')]        
+    
+    def _get_receipt(self):
+        receipt = None
+        # Click "ORDER" until get the receipt
+        while receipt is None:
+            try:
+                self._wait_element((By.ID, "order"))   
+                self._driver.execute_script("order.click()")
+                receipt = self._wait_element((By.ID, "receipt"))
+            except selenium.common.exceptions.TimeoutException as error:
+                receipt = None
+        
+        return receipt
+
+    def _stack_images_vertically(self, image_urls):
+        images = []
+
+        for url in image_urls:
+            response = requests.get(url)
+            img = Image.open(BytesIO(response.content))
+            images.append(img)
+
+        width = max(img.width for img in images)
+        height = sum(img.height for img in images)
+
+        stacked_image = Image.new("RGB", (width, height), (255, 255, 255))  # White background
+
+        current_height = 0
+        for img in images:
+            stacked_image.paste(img, ((width - img.width)//2, current_height))
+            current_height += img.height
+
+        return stacked_image
+        
+    def _save_preview(self, images_urls, receipt_number):
+        image_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.jpg")
+        stacked_image = self._stack_images_vertically(images_urls)
+        stacked_image.save(image_file_path)
+    
     def _make_order(self, order):
+        self._wait_element((By.CLASS_NAME, "btn-dark")).click()
+
+        # Fill the order form
         self._fill_order_form(order)
 
+        # Get order details
+        preview_images_urls =  self._get_preview_images_urls()
+        receipt = self._get_receipt()
+        receipt_number = receipt.find_element(By.CSS_SELECTOR, "p.badge-success")
+        receipt_number = receipt_number.text.split("-")[-1]
+
+        # Save order details
+        self._save_preview(preview_images_urls, receipt_number)
+        
+    def _next_order(self):
+        self._wait_element((By.ID, "order-another"))
+        self._driver.execute_script("window['order-another'].click()")
     
     def _start_ordering(self):
-        self._make_order(self.orders_list[0])  #Temp
+        for order in self.orders_list:
+            self._make_order(order)
+            self._next_order()
 
     def start(self):
+        self._create_output_dir()
         self._get_orders_list()
         self._open_order_page()
         self._start_ordering()
+
+        self._driver.close()
 
 
 if __name__ == "__main__":
     order_robot = OrderRobot()
 
     order_robot.start()
-
-
-
-
-
-
-
-
-
-
-
-
-
-driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
