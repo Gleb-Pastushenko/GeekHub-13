@@ -35,9 +35,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from PIL import Image
 from xhtml2pdf import pisa
-from io import BytesIO
 
 
 class OrderRobot:
@@ -144,33 +142,18 @@ class OrderRobot:
                 receipt = None
         
         return receipt
-
-    def _stack_images_vertically(self, image_urls):
-        images = []
-
-        for url in image_urls:
-            response = requests.get(url)
-            img = Image.open(BytesIO(response.content))
-            images.append(img)
-
-        width = max(img.width for img in images)
-        height = sum(img.height for img in images)
-
-        stacked_image = Image.new("RGB", (width, height), (255, 255, 255))
-
-        current_height = 0
-        for img in images:
-            stacked_image.paste(img, ((width - img.width)//2, current_height))
-            current_height += img.height
-
-        return stacked_image
         
-    def _save_preview(self, images_urls, image_file_path):
-        stacked_image = self._stack_images_vertically(images_urls)
-        stacked_image.save(image_file_path)
+    def _save_preview(self, images_container, image_file_path):
+
+        self._driver.execute_script("""
+            window.document.documentElement.style = 'scroll-behavior: auto !important';
+            window['robot-preview-image'].scrollIntoView({behavior: 'instant'});                        
+        """)
+           
+        images_container.screenshot(str(image_file_path))
 
     def _save_pdf(self, receipt, receipt_number, pdf_file_path):
-        jpg_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.jpg")
+        jpg_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.png")
 
         html_content = f"""
             <table>
@@ -195,16 +178,16 @@ class OrderRobot:
         self._fill_order_form(order)
 
         # Get order details
-        preview_images_urls =  self._get_preview_images_urls()
         receipt = self._get_receipt()
         receipt_number = receipt.find_element(By.CSS_SELECTOR, "p.badge-success")
         receipt_number = receipt_number.text.split("-")[-1]
-
+        images_container = self._wait_element((By.ID, "robot-preview-image"))
+        
         # Save order details
-        image_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.jpg")
+        image_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.png")  # _robot.jpg -> _robot.png
         pdf_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.pdf")
         
-        self._save_preview(preview_images_urls, image_file_path)
+        self._save_preview(images_container, image_file_path)
         self._save_pdf(receipt, receipt_number, pdf_file_path)
         
     def _next_order(self):
