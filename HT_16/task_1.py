@@ -88,7 +88,6 @@ class OrderRobot:
         self._driver.get(self.ORDER_SITE_URL)
         self._wait_element((By.LINK_TEXT, "Order your robot!")).click()
 
-
     def _get_orders_list(self):    
         try:
             self.orders_list = requests.get(self.ORDERS_LIST_URL).text.split("\n")
@@ -153,20 +152,9 @@ class OrderRobot:
         images_container.screenshot(str(image_file_path))
 
     def _save_pdf(self, receipt, receipt_number, pdf_file_path):
-        jpg_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.png")
-
-        html_content = f"""
-            <table>
-                <tr>
-                    <td>
-                        {receipt.get_attribute("outerHTML")}
-                    </td>
-                    <td>
-                        <img src="{jpg_file_path}" />
-                    </td>
-                </tr>
-            </table>     
-        """
+        image_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.png")
+        html_content = f"""<table><td style="margin-right: 20px">{receipt.get_attribute("outerHTML")}</td><td><img src="{image_file_path}" /></td></table>"""
+        # html_content = f"""<table><tr>{main_content}</tr></table>"""
 
         with open(pdf_file_path, "w+b") as pdf_file:
             pisa.CreatePDF(html_content, pdf_file)
@@ -185,8 +173,7 @@ class OrderRobot:
         
         # Save order details
         image_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.png")  # _robot.jpg -> _robot.png
-        pdf_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.pdf")
-        
+        pdf_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.pdf")        
         self._save_preview(images_container, image_file_path)
         self._save_pdf(receipt, receipt_number, pdf_file_path)
         
@@ -204,11 +191,9 @@ class OrderRobot:
         self._get_orders_list()
         self._open_order_page()
         self._start_ordering()
-
         self._driver.close()
 
 
 if __name__ == "__main__":
     order_robot = OrderRobot()
-
     order_robot.start()
