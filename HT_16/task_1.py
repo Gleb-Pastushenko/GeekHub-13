@@ -24,7 +24,6 @@
 import csv
 from pathlib import Path
 from shutil import rmtree
-from io import BytesIO
 
 import requests
 import selenium
@@ -37,6 +36,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from PIL import Image
+from xhtml2pdf import pisa
+from io import BytesIO
 
 
 class OrderRobot:
@@ -88,6 +89,7 @@ class OrderRobot:
     def _open_order_page(self):
         self._driver.get(self.ORDER_SITE_URL)
         self._wait_element((By.LINK_TEXT, "Order your robot!")).click()
+
 
     def _get_orders_list(self):    
         try:
@@ -154,7 +156,7 @@ class OrderRobot:
         width = max(img.width for img in images)
         height = sum(img.height for img in images)
 
-        stacked_image = Image.new("RGB", (width, height), (255, 255, 255))  # White background
+        stacked_image = Image.new("RGB", (width, height), (255, 255, 255))
 
         current_height = 0
         for img in images:
@@ -163,11 +165,29 @@ class OrderRobot:
 
         return stacked_image
         
-    def _save_preview(self, images_urls, receipt_number):
-        image_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.jpg")
+    def _save_preview(self, images_urls, image_file_path):
         stacked_image = self._stack_images_vertically(images_urls)
         stacked_image.save(image_file_path)
-    
+
+    def _save_pdf(self, receipt, receipt_number, pdf_file_path):
+        jpg_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.jpg")
+
+        html_content = f"""
+            <table>
+                <tr>
+                    <td>
+                        {receipt.get_attribute("outerHTML")}
+                    </td>
+                    <td>
+                        <img src="{jpg_file_path}" />
+                    </td>
+                </tr>
+            </table>     
+        """
+
+        with open(pdf_file_path, "w+b") as pdf_file:
+            pisa.CreatePDF(html_content, pdf_file)
+
     def _make_order(self, order):
         self._wait_element((By.CLASS_NAME, "btn-dark")).click()
 
@@ -181,7 +201,11 @@ class OrderRobot:
         receipt_number = receipt_number.text.split("-")[-1]
 
         # Save order details
-        self._save_preview(preview_images_urls, receipt_number)
+        image_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.jpg")
+        pdf_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.pdf")
+        
+        self._save_preview(preview_images_urls, image_file_path)
+        self._save_pdf(receipt, receipt_number, pdf_file_path)
         
     def _next_order(self):
         self._wait_element((By.ID, "order-another"))
