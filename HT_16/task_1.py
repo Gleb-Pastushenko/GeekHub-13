@@ -153,8 +153,12 @@ class OrderRobot:
 
     def _save_pdf(self, receipt, receipt_number, pdf_file_path):
         image_file_path = self.OUTPUT_PATH.joinpath(f"{receipt_number}_robot.png")
-        html_content = f"""<table><td style="margin-right: 20px">{receipt.get_attribute("outerHTML")}</td><td><img src="{image_file_path}" /></td></table>"""
-        # html_content = f"""<table><tr>{main_content}</tr></table>"""
+        html_content = (
+            f"<table>"
+            f"<td style='margin-right: 20px'>{receipt.get_attribute('outerHTML')}</td>"
+            f"<td><img src='{image_file_path}' /></td>"
+            f"</table>"
+        )
 
         with open(pdf_file_path, "w+b") as pdf_file:
             pisa.CreatePDF(html_content, pdf_file)
