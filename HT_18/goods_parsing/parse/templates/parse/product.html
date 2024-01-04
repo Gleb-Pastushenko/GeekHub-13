@@ -1,0 +1,26 @@
+{% extends "parse/base.html" %}
+{% block main %}
+<div class="container">
+    <h2 class="page-header">Product properties</h2>
+    <div class="product-property">
+        <span>Product ID:</span>
+        <span>{{ product.id }}</span>
+    </div>
+    <div class="product-property">
+        <span>Product name:</span>
+        <span>{{ product.name }}</span>
+    </div>
+    <div class="product-property">
+        <span>Product brand:</span>
+        <span>{{ product.brandName }}</span>
+    </div>
+    <div class="product-property">
+        <span>Regular price:</span>
+        <span>{{ product.regularPrice }}</span>
+    </div>
+    <div class="product-property">
+        <span>Product link:</span>
+        <span>{{ product.link }}</span>
+    </div>
+</div>
+{% endblock %}

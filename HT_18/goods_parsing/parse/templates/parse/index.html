@@ -1,0 +1,16 @@
+{% extends "parse/base.html" %}
+{% block main %}
+<div class="container">
+    <h2 class="page-header">
+        Start parcing form
+    </h2>
+
+    <form action="{% url 'parse:add_products' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit" class="btn btn-primary my-3">Parse</button>
+    </form>
+
+
+</div>
+{% endblock %}
