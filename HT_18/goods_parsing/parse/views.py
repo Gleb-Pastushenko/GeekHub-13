@@ -22,7 +22,7 @@ class EnterIdsFormView(FormView):
         if form.is_valid():
             id_list = form.cleaned_data['id_list'].split(',')
             id_list = set(item.strip() for item in id_list)
-
+            print(id_list)
             self.start_subprocess(id_list)
 
             context.update({'message': 'Products scraping start successfully'})
