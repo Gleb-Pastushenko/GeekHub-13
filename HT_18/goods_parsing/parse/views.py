@@ -38,13 +38,13 @@ class EnterIdsFormView(FormView):
             command, shell=True, stdin=stdin, stdout=stdout, stderr=stderr)
 
 
-class MyProductsView(ListView):
+class ProductsListView(ListView):
     model = Product
     template_name = "parse/my_products.html"
     context_object_name = "products"
 
 
-class ProductView(DetailView):
+class ProductDetailView(DetailView):
     model = Product
     template_name = "parse/product.html"
     context_object_name = "product"
