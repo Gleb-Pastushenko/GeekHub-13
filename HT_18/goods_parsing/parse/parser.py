@@ -1,4 +1,3 @@
-from datetime import timezone
 from time import sleep
 
 import requests
@@ -46,11 +45,11 @@ class Parser:
             except requests.JSONDecodeError:
                 sleep(10)
 
-    def get_product_data(self, id):
-        response_json = self.get_response_json(id)
+    def get_product_data(self, product_id):
+        response_json = self.get_response_json(product_id)
         try:
             product_data = response_json['productDetail']['softhardProductdetails'][0]
-            product = {'id': id,
+            product = {'id': product_id,
                        'name': product_data['descriptionName'],
                        'brand_name': product_data['brandName'],
                        'regular_price': product_data['price']['finalPrice'],
@@ -62,8 +61,8 @@ class Parser:
         return product
 
     def run(self):
-        for id in self.id_list:
-            product = self.get_product_data(id)
+        for product_id in self.id_list:
+            product = self.get_product_data(product_id)
             if product is not None:
                 Product.objects.update_or_create(
-                    id=id, defaults=product)
+                    id=product_id, defaults=product)
