@@ -52,8 +52,8 @@ class Parser:
             product_data = response_json['productDetail']['softhardProductdetails'][0]
             product = {'id': id,
                        'name': product_data['descriptionName'],
-                       'brandName': product_data['brandName'],
-                       'regularPrice': product_data['price']['finalPrice'],
+                       'brand_name': product_data['brandName'],
+                       'regular_price': product_data['price']['finalPrice'],
                        'description': product_data['shortDescription'],                       
                        'link': 'https://www.sears.com' + product_data['seoUrl'],
                        }          
