@@ -34,8 +34,7 @@ class EnterIdsFormView(FormView):
         project_root = Path(__file__).parent.parent
         manage_py_path = Path(project_root, "manage.py")
         command = f'python {manage_py_path} shell --command="from parse.parser import Parser; Parser({id_list}).run()"'
-        process = subprocess.Popen(
-            command, shell=True, stdin=stdin, stdout=stdout, stderr=stderr)
+        subprocess.Popen(command, shell=True, stdin=stdin, stdout=stdout, stderr=stderr)
 
 
 class ProductsListView(ListView):
