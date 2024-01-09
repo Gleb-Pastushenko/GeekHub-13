@@ -5,7 +5,7 @@
         Start parcing form
     </h2>
 
-    <form action="{% url 'parse:add_products' %}" method="post">
+    <form action="{% url 'parse:parse' %}" method="post">
         {% csrf_token %}
         {{ form }}
         <button type="submit" class="btn btn-primary my-3">Parse</button>

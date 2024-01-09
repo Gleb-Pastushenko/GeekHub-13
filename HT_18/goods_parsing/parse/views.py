@@ -24,7 +24,7 @@ class EnterIdsFormView(FormView):
             id_list = set(item.strip() for item in id_list)
             self.start_subprocess(id_list)
 
-            context.update({'message': 'Products parsing start successfully'})
+            context.update({'message': 'Products scraping start successfully'})
         else:
             context.update({'message': 'Form data unsuccessfully'})
 

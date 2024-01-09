@@ -5,7 +5,7 @@ from . import views
 app_name = "parse"
 
 urlpatterns = [
-    path("", views.EnterIdsFormView.as_view(), name="add_products"),
-    path("my_products/", views.MyProductsView.as_view(), name="my_products"),
-    path("product/<pk>/", views.ProductView.as_view(), name="product"),
+    path("parse/", views.EnterIdsFormView.as_view(), name="parse"),
+    path("", views.MyProductsView.as_view(), name="products"),
+    path("<pk>/", views.ProductView.as_view(), name="product_details"),
 ]

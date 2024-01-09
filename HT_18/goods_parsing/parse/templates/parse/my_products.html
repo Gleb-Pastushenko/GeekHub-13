@@ -16,7 +16,7 @@
         <tbody>
             {% for product in products %}
             <tr>
-                <td><a href="{% url 'parse:product' product.id %}">{{ product.name }}</a></td>
+                <td><a href="{% url 'parse:product_details' product.id %}">{{ product.name }}</a></td>
                 <td>{{ product.id }}</td>
                 <td>{{ product.regular_price }}</td>
             </tr>
