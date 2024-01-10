@@ -26,7 +26,11 @@ class Parser:
         self.id_list = id_list
 
     def get_response_json(self, id):
-        while True:
+        tries = 10
+
+        while tries:
+            tries -= 1
+
             try:
                 params = {
                     'storeName': 'Sears',
@@ -45,9 +49,12 @@ class Parser:
             except requests.JSONDecodeError:
                 sleep(10)
 
-    def get_product_data(self, product_id):
-        response_json = self.get_response_json(product_id)
+        raise Exception("Unsuccessful product data request 10 times in a row. Requests terminated")
+
+
+    def get_product_data(self, product_id):        
         try:
+            response_json = self.get_response_json(product_id)
             product_data = response_json['productDetail']['softhardProductdetails'][0]
             product = {'id': product_id,
                        'name': product_data['descriptionName'],
