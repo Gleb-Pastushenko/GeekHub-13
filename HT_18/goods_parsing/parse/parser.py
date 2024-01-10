@@ -56,8 +56,11 @@ class Parser:
                        'description': product_data['shortDescription'],                       
                        'link': 'https://www.sears.com' + product_data['seoUrl'],
                        }          
-        except Exception:
+        except Exception as err:
+            print("The next error occurs while parsing the product data:")
+            print(err)
             product = None
+
         return product
 
     def run(self):
