@@ -4,7 +4,6 @@ import requests
 
 from .models import Product
 
-
 HEADERS = {
     'authority': 'www.sears.com',
     'accept': 'application/json, text/plain, */*',
@@ -25,7 +24,7 @@ class Parser:
     def __init__(self, id_list):
         self.id_list = id_list
 
-    def get_response_json(self, id):
+    def get_response_json(self, product_id):
         tries = 10
 
         while tries:
@@ -39,7 +38,7 @@ class Parser:
                 }
 
                 response = requests.get(
-                    f'https://www.sears.com/api/sal/v3/products/details/{id}',
+                    f'https://www.sears.com/api/sal/v3/products/details/{product_id}',
                     params=params,
                     headers=HEADERS,
                 )
@@ -50,7 +49,6 @@ class Parser:
                 sleep(10)
 
         raise Exception("Unsuccessful product data request 10 times in a row. Requests terminated")
-
 
     def get_product_data(self, product_id):        
         try:
