@@ -62,8 +62,7 @@ class Parser:
                        'link': 'https://www.sears.com' + product_data['seoUrl'],
                        }          
         except Exception as err:
-            print("The next error occurs while parsing the product data:")
-            print(err)
+            print(f"The next error occurs while parsing the product data: \n{err}")
             product = None
 
         return product
