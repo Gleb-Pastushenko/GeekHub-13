@@ -1,0 +1,82 @@
+/* Styles reset */
+
+a {
+    text-decoration: none;
+}
+
+a:not([class]) {
+    text-decoration-skip-ink: auto;
+}
+
+
+/* Common styles */
+
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+
+/* Header styles */
+
+.nav-panel {
+    max-width: 800px;
+    margin: auto;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    column-gap: 30px;
+
+    list-style-type: none;
+    padding: 0;
+}
+
+.nav-link {
+    padding: 4px 10px;
+    border: 1px solid rgb(206, 252, 226);
+    border-radius: 6px;
+}
+
+.nav-link a {
+    color: rgb(79, 93, 85);
+}
+
+.nav-link:hover {
+    border: 1px solid rgb(164, 211, 185);
+    box-shadow: 0 0 7px 1px rgb(164, 211, 185);
+    transition: all 0.5s;
+}
+
+.main-header {
+    text-align: center;
+}
+
+
+/* Main content styles */
+
+.container {
+    max-width: 800px;
+    margin: auto;
+}
+
+.page-header {
+    text-align: center;
+}
+
+.product-property {
+    display: flex;
+    column-gap: 30px;
+}
+
+table {
+    margin: auto;
+}
+
+th {
+    padding: 0 20px;
+}
+
+td {
+    text-align: center;
+}
