@@ -2,8 +2,9 @@
 {% block main %}
 <div class="container">
     <h2 class="page-header">
-        Parsed Products List
+        Cart
     </h2>
+    <div class="clear-cart-subheader"><a href="{% url 'cart:clear_cart' %}">clear cart</a></div>
 
     <table>
         <thead>
@@ -11,7 +12,7 @@
                 <th class="table-header">Product Name</th>
                 <th class="table-header">Product ID</th>
                 <th class="table-header">Product price</th>
-                <th class="table-header">Add to Cart</th>
+                <th class="table-header">Qty</th>
             </tr>
         </thead>
         <tbody>
@@ -20,7 +21,15 @@
                 <td><a href="{% url 'parse:product_details' product.id %}">{{ product.name }}</a></td>
                 <td>{{ product.id }}</td>
                 <td>{{ product.regular_price }}</td>
-                <td><a href="{% url 'cart:add_product' product.id %}">Add</a></td>
+                <td>
+                    <a href="{% url 'cart:product_inc' product.id %}">+</a>
+                    {{ product.qty }}
+                    <a href="{% url 'cart:product_dec' product.id %}">-</a>
+                </td>
+                <td>
+                    <a href="{% url 'cart:remove_product' product.id %}">Remove</a>
+                </td>
+
             </tr>
             {% endfor %}
         </tbody>

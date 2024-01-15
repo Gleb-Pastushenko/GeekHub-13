@@ -64,6 +64,23 @@ body {
     text-align: center;
 }
 
+.clear-cart-subheader {
+    text-align: center;
+    margin-top: -15px;
+    margin-bottom: 15px;
+}
+
+.clear-cart-subheader a {
+    display: inline-flex;
+    align-items: start;
+    font-size: 12px;
+    color: red;
+    border: 1px solid red;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 0.3px red;
+    padding: 3px;
+}
+
 .product-property {
     display: flex;
     column-gap: 30px;
