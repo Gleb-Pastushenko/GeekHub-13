@@ -81,6 +81,10 @@ body {
     padding: 3px;
 }
 
+.items-qty {
+    width: 20px;
+}
+
 .product-property {
     display: flex;
     column-gap: 30px;
