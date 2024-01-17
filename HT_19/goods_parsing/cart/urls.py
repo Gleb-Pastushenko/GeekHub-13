@@ -11,9 +11,4 @@ urlpatterns = [
     path("clear_cart/", views.clear_cart, name="clear_cart"),
     path("product_inc/<product_id>", views.product_inc, name="product_inc"),
     path("product_dec/<product_id>", views.product_dec, name="product_dec"),
-
-
-    # path("parse/", views.EnterIdsFormView.as_view(), name="parse"),
-    # path("products/", views.ProductsListView.as_view(), name="products"),
-    # path("product/<pk>", views.ProductDetailView.as_view(), name="product_details"),    
 ]

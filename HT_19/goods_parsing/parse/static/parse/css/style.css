@@ -83,6 +83,7 @@ body {
 
 .items-qty {
     width: 20px;
+    white-space: nowrap;
 }
 
 .product-property {

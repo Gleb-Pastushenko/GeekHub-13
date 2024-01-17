@@ -22,31 +22,20 @@
                 <td>{{ product.id }}</td>
                 <td>{{ product.regular_price }}</td>
                 <td>
-                    <a href="{% url 'cart:product_inc' product.id %}">+</a>
-                    <span class="items-qty" contenteditable onkeydown="handleChange(event)">
+                    <a href="{% url 'cart:product_dec' product.id %}">-</a>
+                    <span class="items-qty" onclick="handleClick(event)" onkeyup="handleChange(event)"
+                        onblur="createURL(event)">
                         {{ product.qty }}
                     </span>
-                    <a href="{% url 'cart:product_dec' product.id %}">-</a>
+                    <span style="display: none"></span>
+                    <a href="{% url 'cart:product_inc' product.id %}">+</a>
                 </td>
                 <td>
                     <a href="{% url 'cart:remove_product' product.id %}">Remove</a>
                 </td>
-
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <script>
-        function handleChange(e) {
-            if ("0123456789".includes(e.key)) {
-                e.target.value += e.key
-                console.log(e.key)
-            } else {
-                e.preventDefault()
-            }
-
-
-        }
-    </script>
 </div>
 {% endblock %}

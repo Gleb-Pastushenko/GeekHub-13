@@ -5,7 +5,8 @@ from parse.models import Product
 
 
 def cart(request):
-    cart = request.session.get('cart')
+    cart = request.session.get('cart') or {}
+    print(cart)
     products = []
     
     if cart:
@@ -43,9 +44,10 @@ def remove_product(request, product_id):
 
 def clear_cart(request):
     cart = request.session.get('cart')
-    cart.clear()
-    request.session['cart'] = cart
-    request.session.modified = True
+    if cart:            
+        cart.clear()
+        request.session['cart'] = cart
+        request.session.modified = True
 
     return redirect(reverse('parse:products'))
 
@@ -74,4 +76,3 @@ def product_dec(request, product_id):
         return redirect(reverse('cart:cart'))
     else:
         return redirect(reverse('parse:products'))
-
