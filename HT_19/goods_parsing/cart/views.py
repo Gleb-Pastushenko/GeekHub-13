@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.forms import model_to_dict
 
 from parse.models import Product
 
@@ -11,7 +12,7 @@ def cart(request):
     
     if cart:
         for product_id, qty in cart.items():
-            products.append({**(Product.objects.filter(pk=product_id).values()[0]), "qty": qty})
+            products.append({**model_to_dict(Product.objects.get(pk=product_id)), "qty": qty})
 
     return render(request, "cart/my_products.html", {'products': products})
 
