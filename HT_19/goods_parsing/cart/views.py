@@ -13,7 +13,7 @@ def cart(request):
     if cart:
         for product_id, qty in cart.items():
             if product := Product.objects.filter(pk=product_id).first():
-                products.append({**model_to_dict(Product.objects.get(pk=product_id)), "qty": qty})
+                products.append({**product, "qty": qty})
 
     return render(request, "cart/my_products.html", {'products': products})
 
