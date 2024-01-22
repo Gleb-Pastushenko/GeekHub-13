@@ -55,7 +55,7 @@ class Parser:
             response_json = self.get_response_json(product_id)
             product_data = response_json['productDetail']['softhardProductdetails'][0]
             product = {
-                'id': product_data['partNum'],
+                'id': product_data['identity']['sSin'],
                 'name': product_data['descriptionName'],
                 'brand_name': product_data['brandName'],
                 'price': product_data['regularPrice'],

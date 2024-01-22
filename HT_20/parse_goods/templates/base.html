@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head_block %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>
+        {% block title_block %} GParser {% endblock %}
+    </title>
+    {% endblock %}
+</head>
+
+<body>
+    <header class="section">
+        <div class="section-container">
+            <nav class="nav-menu">
+                {% block nav_block %}
+                <ul class="nav-links">
+                    {% if user.is_superuser %}
+                    <li><a href="{% url 'products_app:parse' %}" class="nav-link">PARSE</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'products_app:products' %}" class="nav-link">PRODUCTS</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'cart_app:cart' %}" class="nav-link">CART</a></li>
+                    {% endif %}
+                </ul>
+                <div class="nav-login">
+                    {% if user.is_authenticated %}
+                    <span class="nav-username">👤 {{user.username}}</span>
+                    <a href="{% url 'auth_app:logout' %}" class="nav-link">LOGOUT</a>
+                    {% else %}
+                    <a href="{% url 'auth_app:login' %}" class="nav-link">LOGIN</a>
+                    {% endif %}
+                    {% endblock %}
+                </div>
+
+            </nav>
+        </div>
+    </header>
+
+    <main class="section">
+        <div class="section-container">
+            {% block main_block %}
+            {% endblock %}
+        </div>
+    </main>
+</body>
+
+</html>

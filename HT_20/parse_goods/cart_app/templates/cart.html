@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title_block %}GParser : cart{% endblock %}
+
+{% block main_block %}
+
+<div class="header-container">
+    <h2 class="page-header">
+        Cart
+    </h2>
+    <a class="interface-button" href="{% url 'cart_app:clear' %}">
+        CLEAR CART
+    </a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th class="table-header">Product Name</th>
+            <th class="table-header">Product ID</th>
+            <th class="table-header">Product price</th>
+            <th class="table-header">Qty</th>
+        </tr>
+    </thead>
+    <tbody class="cart-table">
+        {% for product in products %}
+        <tr>
+            <td><a href="{% url 'products_app:product_details' product.id %}">{{ product.name }}</a></td>
+            <td>{{ product.id }}</td>
+            <td>{{ product.price }}</td>
+            <td>
+                <a href="{% url 'cart_app:dec_product' product.id %}">-</a>
+                <span class="items-qty" onclick="handleClick(event)" onkeyup="handleChange(event)"
+                    onblur="createURL(event)">
+                    {{ product.qty }}
+                </span>
+                <span style="display: none"></span>
+                <a href="{% url 'cart_app:inc_product' product.id %}">+</a>
+            </td>
+            <td>
+                <a href="{% url 'cart_app:remove_product' product.id %}">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

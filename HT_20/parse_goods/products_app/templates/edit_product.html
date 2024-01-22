@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title_block %}GParser : edit product{% endblock %}
+
+{% block main_block %}
+<h2 class="page-header">Edit Product</h2>
+<form method="post">
+    <div class="form-container">
+        {% csrf_token %}
+        {{ form.as_p }}
+    </div>
+
+    <button type="submit" class="interface-button">Save</button>
+</form>
+{% endblock %}
