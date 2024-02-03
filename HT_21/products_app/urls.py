@@ -17,4 +17,5 @@ urlpatterns = [
     # API patterns
     path('api/products/', views.ProductsAPIView.as_view(), name='api_products'),
     path('api/products/<pk>', views.ProductAPIView.as_view(), name='api_product'),
+    path('api/parse/', views.ProductsParseAPIView.as_view(), name='api_parse'),
 ]

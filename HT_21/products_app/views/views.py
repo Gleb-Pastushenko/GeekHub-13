@@ -1,5 +1,3 @@
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
-from rest_framework.permissions import IsAdminUser
 import subprocess
 from sys import stdout, stdin, stderr
 from pathlib import Path
@@ -11,7 +9,6 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 from products_app.models import Product
 from products_app.forms import EnterIdsForm
-from products_app.serializers import ProductsSerializer
 
 
 class ProductsListView(ListView):
@@ -102,25 +99,3 @@ class ProductDeleteView(UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         return self.request.user.is_superuser
-
-
-class ProductsAPIView(ListCreateAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductsSerializer
-
-    def get_permissions(self):
-        if self.request.method == 'GET':
-            return []
-        else:
-            return [IsAdminUser()]
-
-
-class ProductAPIView(RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductsSerializer
-
-    def get_permissions(self):
-        if self.request.method == "GET":
-            return []
-        else:
-            return [IsAdminUser()]
