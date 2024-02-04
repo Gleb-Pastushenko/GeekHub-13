@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title_block %}GParser : delete product{% endblock %}
+
+{% block main_block %}
+<h2 class="page-header">Delete Product</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-container">
+        <p class="warning-text">Are you sure you want to delete product completely?</p>
+
+        <button type="submit" class="interface-button">CONFIRM</button>
+    </div>
+</form>
+<a href="{% url 'products_app:products' %}" class="interface-button">CANCEL</a>
+{% endblock %}

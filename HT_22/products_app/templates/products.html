@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block links_block %}
+<script src="{% static 'products_app/js/scripts.js' %}"></script>
+{% endblock %}
+
+{% block title_block %}GParser : products{% endblock %}
+
+{% block main_block %}
+<h2 class="page-header">Products page</h2>
+
+<ul class="categories-container">
+    <li class="categories-header-item">
+        <h3 class="categories-header">CATEGORIES:</h3>
+    </li>
+    {% for category in categories %}
+    <li>
+        <a class="interface-button" href="{% url 'products_app:products_by_category' category%}">{{ category }}</a>
+    </li>
+    {% endfor %}
+
+</ul>
+
+<table>
+    <thead>
+        <tr>
+            <th class="table-header">Product Name</th>
+            <th class="table-header">Product ID</th>
+            <th class="table-header">Product price</th>
+            {% if user.is_authenticated %}
+            <th class="table-header">Add to cart</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody id="products_table">
+        {% for product in products %}
+        <tr>
+            <td><a href="{% url 'products_app:product_details' product.id %}">{{ product.name }}</a></td>
+            <td>{{ product.id }}</td>
+            <td>{{ product.price }}</td>
+            {% if user.is_authenticated %}
+            <td><a href="#" class="add-link" data-product_id="{{ product.id }}" data-type="add-to-cart-btn">Add</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
