@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title_block %} GParser : product details {% endblock %}
+
+{% block main_block %}
+<div class="container product-properties">
+    <div class="header-container">
+        <h2 class="page-header">Product properties</h2>
+        {% if user.is_superuser %}
+        <div class="buttons-container">
+            <a href="{% url 'products_app:product_edit' product.id %}" class="interface-button">EDIT</a>
+            <a href="{% url 'products_app:delete_product' product.id %}" class="interface-button">REMOVE</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="product-property">
+        <span>Product ID:</span>
+        <span>{{ product.id }}</span>
+    </div>
+    <div class="product-property">
+        <span>Product name:</span>
+        <span>{{ product.name }}</span>
+    </div>
+    <div class="product-property">
+        <span>Product brand:</span>
+        <span>{{ product.brand_name }}</span>
+    </div>
+    <div class="product-property">
+        <span>Product description:</span>
+        <span>{{ product.description }}</span>
+    </div>
+    <div class="product-property">
+        <span>Regular price:</span>
+        <span>{{ product.price }}</span>
+    </div>
+    <div class="product-property">
+        <span>Product link:</span>
+        <span>{{ product.link }}</span>
+    </div>
+</div>
+{% endblock %}

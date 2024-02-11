@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block links_block %}
+<script src="{% static 'cart_app/js/scripts.js' %}"></script>
+{% endblock %}
+
+{% block title_block %}GParser : cart{% endblock %}
+
+{% block main_block %}
+
+<div class="header-container">
+    <h2 class="page-header">
+        Cart
+    </h2>
+    <a class="interface-button" href="#" data-type="cart-edit-btn" data-action="clear">
+        CLEAR CART
+    </a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th class="table-header">Product Name</th>
+            <th class="table-header">Product ID</th>
+            <th class="table-header">Product price</th>
+            <th class="table-header">Qty</th>
+        </tr>
+    </thead>
+    <tbody class="cart-table" id="products_table">
+        {% for product in products %}
+        <tr>
+            <td><a href="{% url 'products_app:product_details' product.id %}">{{ product.name }}</a></td>
+            <td>{{ product.id }}</td>
+            <td>{{ product.price }}</td>
+            <td>
+                <a href="#" data-type="cart-edit-btn" data-action="dec" data-product_id="{{ product.id }}">-</a>
+                <span class="items-qty" onclick="handleClick(event)" onkeyup="handleChange(event)"
+                    onblur="createURL(event)">
+                    {{ product.qty }}
+                </span>
+                <span style="display: none"></span>
+                <a href="#" data-type="cart-edit-btn" data-action="inc" data-product_id="{{ product.id }}">+</a>
+            </td>
+            <td>
+                <a href="#" data-type="cart-edit-btn" data-action="remove" data-product_id="{{ product.id }}">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
