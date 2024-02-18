@@ -39,7 +39,7 @@ class ProductsParseAPIView(APIView):
 
     def post(self, request):
         self.start_subprocess(request.data)
-        return Response(request.data)
+        return Response(request.data.get('id_list'))
 
     def start_subprocess(self, id_list):
         project_root = Path(__file__).parent.parent.parent
